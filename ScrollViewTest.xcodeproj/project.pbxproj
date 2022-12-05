@@ -16,6 +16,10 @@
 		2A7D7336293D8B6500AC703D /* ScrollViewTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7D7335293D8B6500AC703D /* ScrollViewTestTests.swift */; };
 		2A7D7340293D8B6500AC703D /* ScrollViewTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7D733F293D8B6500AC703D /* ScrollViewTestUITests.swift */; };
 		2A7D7342293D8B6500AC703D /* ScrollViewTestUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7D7341293D8B6500AC703D /* ScrollViewTestUITestsLaunchTests.swift */; };
+		2A7D7355293D9FDC00AC703D /* HParallaxHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7D7353293D9FDC00AC703D /* HParallaxHeader.swift */; };
+		2A7D7356293D9FDC00AC703D /* HParallaxHeaderContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7D7354293D9FDC00AC703D /* HParallaxHeaderContainer.swift */; };
+		2A7D7359293DA08F00AC703D /* CustomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A7D7357293DA08F00AC703D /* CustomViewController.swift */; };
+		2A7D735A293DA08F00AC703D /* CustomViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A7D7358293DA08F00AC703D /* CustomViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,10 @@
 		2A7D733B293D8B6500AC703D /* ScrollViewTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScrollViewTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A7D733F293D8B6500AC703D /* ScrollViewTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewTestUITests.swift; sourceTree = "<group>"; };
 		2A7D7341293D8B6500AC703D /* ScrollViewTestUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewTestUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2A7D7353293D9FDC00AC703D /* HParallaxHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HParallaxHeader.swift; sourceTree = "<group>"; };
+		2A7D7354293D9FDC00AC703D /* HParallaxHeaderContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HParallaxHeaderContainer.swift; sourceTree = "<group>"; };
+		2A7D7357293DA08F00AC703D /* CustomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewController.swift; sourceTree = "<group>"; };
+		2A7D7358293DA08F00AC703D /* CustomViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +107,7 @@
 		2A7D731D293D8B6200AC703D /* ScrollViewTest */ = {
 			isa = PBXGroup;
 			children = (
+				2A7D7352293D9FDC00AC703D /* ParallaxHeaderContainer */,
 				2A7D731E293D8B6200AC703D /* AppDelegate.swift */,
 				2A7D7320293D8B6200AC703D /* SceneDelegate.swift */,
 				2A7D7322293D8B6200AC703D /* ViewController.swift */,
@@ -106,6 +115,8 @@
 				2A7D7327293D8B6500AC703D /* Assets.xcassets */,
 				2A7D7329293D8B6500AC703D /* LaunchScreen.storyboard */,
 				2A7D732C293D8B6500AC703D /* Info.plist */,
+				2A7D7357293DA08F00AC703D /* CustomViewController.swift */,
+				2A7D7358293DA08F00AC703D /* CustomViewController.xib */,
 			);
 			path = ScrollViewTest;
 			sourceTree = "<group>";
@@ -125,6 +136,15 @@
 				2A7D7341293D8B6500AC703D /* ScrollViewTestUITestsLaunchTests.swift */,
 			);
 			path = ScrollViewTestUITests;
+			sourceTree = "<group>";
+		};
+		2A7D7352293D9FDC00AC703D /* ParallaxHeaderContainer */ = {
+			isa = PBXGroup;
+			children = (
+				2A7D7353293D9FDC00AC703D /* HParallaxHeader.swift */,
+				2A7D7354293D9FDC00AC703D /* HParallaxHeaderContainer.swift */,
+			);
+			path = ParallaxHeaderContainer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -234,6 +254,7 @@
 				2A7D732B293D8B6500AC703D /* LaunchScreen.storyboard in Resources */,
 				2A7D7328293D8B6500AC703D /* Assets.xcassets in Resources */,
 				2A7D7326293D8B6200AC703D /* Main.storyboard in Resources */,
+				2A7D735A293DA08F00AC703D /* CustomViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,7 +281,10 @@
 			files = (
 				2A7D7323293D8B6200AC703D /* ViewController.swift in Sources */,
 				2A7D731F293D8B6200AC703D /* AppDelegate.swift in Sources */,
+				2A7D7355293D9FDC00AC703D /* HParallaxHeader.swift in Sources */,
+				2A7D7359293DA08F00AC703D /* CustomViewController.swift in Sources */,
 				2A7D7321293D8B6200AC703D /* SceneDelegate.swift in Sources */,
+				2A7D7356293D9FDC00AC703D /* HParallaxHeaderContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
