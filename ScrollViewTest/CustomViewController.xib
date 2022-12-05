@@ -10,7 +10,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CustomViewController" customModule="ScrollViewTest" customModuleProvider="target">
             <connections>
+                <outlet property="header" destination="nBL-bk-FFj" id="6Sv-Y8-GYj"/>
                 <outlet property="headerContainer" destination="SyD-Gx-2Dl" id="Dow-MZ-nLd"/>
+                <outlet property="loadingIcon" destination="aEj-Hk-GcA" id="8Je-hA-gNn"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -24,7 +26,9 @@
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="content" destination="jEJ-UK-vvW" id="ZMr-61-jKm"/>
+                        <outlet property="delegate" destination="-1" id="Uqz-BO-RjW"/>
                         <outlet property="header" destination="nBL-bk-FFj" id="fxm-u1-2F4"/>
+                        <outlet property="loading" destination="5OD-cX-0pK" id="wrW-Up-dUN"/>
                     </connections>
                 </view>
             </subviews>
@@ -274,8 +278,29 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="742" y="130"/>
         </view>
+        <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="5OD-cX-0pK">
+            <rect key="frame" x="0.0" y="0.0" width="298" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow.down.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="aEj-Hk-GcA">
+                    <rect key="frame" x="139" y="15.999999999999998" width="20" height="18.666666666666664"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="Oqs-bi-a5j"/>
+                        <constraint firstAttribute="width" constant="20" id="yQA-gi-z9y"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="aEj-Hk-GcA" firstAttribute="centerX" secondItem="5OD-cX-0pK" secondAttribute="centerX" id="MbT-FR-bYH"/>
+                <constraint firstItem="aEj-Hk-GcA" firstAttribute="centerY" secondItem="5OD-cX-0pK" secondAttribute="centerY" id="kfT-3T-QQC"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="741.53846153846155" y="-373.22274881516586"/>
+        </view>
     </objects>
     <resources>
+        <image name="arrow.down.circle" catalog="system" width="128" height="123"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

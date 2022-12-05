@@ -9,12 +9,15 @@ import UIKit
 
 class CustomViewController: UIViewController {
 
+    @IBOutlet weak var loadingIcon: UIImageView!
+    @IBOutlet var header: UIView!
     @IBOutlet weak var headerContainer: HParallaxHeaderContainer!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         headerContainer.headerContainerView.height = 100
+        header.backgroundColor = .blue
     }
 
 
@@ -46,5 +49,15 @@ class CustomViewController: UIViewController {
     
     @IBAction func bottomAction(_ sender: Any) {
         headerContainer.headerContainerView.mode = .bottom
+    }
+}
+
+extension CustomViewController: HParallaxHeaderContainerDelegate {
+    func hParallaxContainer(_ view: HParallaxHeaderContainer, didChangePullToRefreshViewHeight height: CGFloat, maximumAvailableHeight: CGFloat) {
+        loadingIcon.transform = CGAffineTransform(rotationAngle:  (height / maximumAvailableHeight) * CGFloat.pi)
+    }
+    
+    func hParallaxContainerDidPullToRefresh(_ view: HParallaxHeaderContainer) {
+        print("Hello")
     }
 }

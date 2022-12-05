@@ -31,8 +31,7 @@ class HParallaxHeader: UIView {
          */
         case bottom
     }
-
-    var header: HParallaxHeader!
+    
     public var mode: HeaderMode = .fill {
         didSet {
             if (mode != oldValue) {
@@ -50,7 +49,11 @@ class HParallaxHeader: UIView {
     }
     
     private var heightConstraint: NSLayoutConstraint?
-    @IBOutlet var content: UIView!
+    @IBOutlet var content: UIView! {
+        didSet {
+            updateConstraints()
+        }
+    }
     // MARK: - LifeCycle
     required init?(coder: NSCoder) {
         super.init(coder: coder)
