@@ -295,7 +295,7 @@ extension HParallaxHeaderContainer: UIGestureRecognizerDelegate {
             return true
         }
         // Make sure other scrollView is Vertical scrollable
-        guard otherView.contentSize.height > otherView.height,
+        guard otherView.contentSize.height > otherView.frame.height,
                 otherView.isScrollEnabled == true else {
             isReceiveTouchFromOtherScrollView = false
             return true
