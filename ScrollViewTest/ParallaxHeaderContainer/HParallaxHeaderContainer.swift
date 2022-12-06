@@ -52,7 +52,7 @@ class HParallaxHeaderContainer: UIView {
     @IBOutlet weak var delegate: HParallaxHeaderContainerDelegate?
     
     
-    public var isEnablePullToRefresh: Bool = false
+    @IBInspectable public var isEnablePullToRefresh: Bool = false
     public var maximunHeightOfPullToRefresh: CGFloat = 100
     private var isRefreshing: Bool = false
     
@@ -68,7 +68,7 @@ class HParallaxHeaderContainer: UIView {
     
     private var gestureStartLocation: CGPoint = .zero
     private var headerStartHeight: CGFloat = 0
-    private var isReceiveTouchFromHeader: Bool = false
+    private var isReceiveTouchFromOtherScrollView: Bool = false
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -185,26 +185,15 @@ class HParallaxHeaderContainer: UIView {
         ])
     }
     
-    func endRefreshing() {
-        isRefreshing = false
-    }
-    
-    private func performPullToRefresh() {
-        
-    }
-    
     @objc func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .began:
             endEditing(true)
             let location = gesture.location(in: self)
-            if headerContainerView.frame.contains(gesture.location(in: self)) {
-                isReceiveTouchFromHeader = true
-                gestureStartLocation = location
-                headerStartHeight = heightOfHeader.constant
-            }
+            gestureStartLocation = location
+            headerStartHeight = heightOfHeader.constant
         case .changed: ()
-            if isReceiveTouchFromHeader {
+            if !isReceiveTouchFromOtherScrollView {
                 let currentLocation = gesture.location(in: self)
                 let offSetY = gestureStartLocation.y - currentLocation.y
                 // Up > 0 , down < 0
@@ -227,7 +216,7 @@ class HParallaxHeaderContainer: UIView {
             }
         case .ended:
             headerStartHeight = 0
-            isReceiveTouchFromHeader = false
+            isReceiveTouchFromOtherScrollView = false
             if isEnablePullToRefresh && heightOfLoading.constant > 0 {
                 if heightOfLoading.constant == maximunHeightOfPullToRefresh {
                     delegate?.hParallaxContainerDidPullToRefresh?(self)
@@ -240,7 +229,6 @@ class HParallaxHeaderContainer: UIView {
                                                        maximumAvailableHeight: self.maximunHeightOfPullToRefresh)
 
                 }
-              
             }
         default: ()
         }
@@ -290,7 +278,6 @@ class HParallaxHeaderContainer: UIView {
         scrollView.contentOffset = offset
         isObserving = true
     }
-    
 }
 
 extension HParallaxHeaderContainer: UIGestureRecognizerDelegate {
@@ -304,6 +291,13 @@ extension HParallaxHeaderContainer: UIGestureRecognizerDelegate {
         }
         
         guard let otherView = otherGestureRecognizer.view as? UIScrollView else {
+            isReceiveTouchFromOtherScrollView = false
+            return true
+        }
+        // Make sure other scrollView is Vertical scrollable
+        guard otherView.contentSize.height > otherView.height,
+                otherView.isScrollEnabled == true else {
+            isReceiveTouchFromOtherScrollView = false
             return true
         }
         
@@ -316,6 +310,8 @@ extension HParallaxHeaderContainer: UIGestureRecognizerDelegate {
             otherView.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset),  options: [.old, .new], context: &HParallaxHeaderContainer.context)
             observingViews.append(otherView)
         }
+      
+        isReceiveTouchFromOtherScrollView = true
         return true
     }
 }
