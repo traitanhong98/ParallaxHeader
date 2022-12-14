@@ -20,11 +20,8 @@ class CustomViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-//        headerContainer.headerContainerView.headerHeight = 100
-//        headerContainer.isEnablePullToRefresh = true
-        headerContainer.contentHeaderView = headerMain
-        headerContainer.mainContentView = contentMain
-        headerContainer.loadingView = loadingMain
+        headerContainer.headerContainerView.headerHeight = 100
+        headerContainer.isEnablePullToRefresh = true
     }
 
     @IBAction func fillAction(_ sender: Any) {
