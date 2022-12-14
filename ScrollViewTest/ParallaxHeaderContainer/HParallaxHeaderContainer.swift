@@ -10,6 +10,7 @@ import UIKit
 @objc protocol HParallaxHeaderContainerDelegate: AnyObject {
     @objc optional func hParallaxContainerDidPullToRefresh(_ view: HParallaxHeaderContainer)
     @objc optional func hParallaxContainer(_ view: HParallaxHeaderContainer, didChangePullToRefreshViewHeight height: CGFloat, maximumAvailableHeight: CGFloat)
+    @objc optional func hParallaxContainer(_ view: HParallaxHeaderContainer, didChangeHeaderViewHeight height: CGFloat, maximumAvailableHeight: CGFloat)
 }
 
 class HParallaxHeaderContainer: UIView {
@@ -56,6 +57,7 @@ class HParallaxHeaderContainer: UIView {
     public var maximunHeightOfPullToRefresh: CGFloat = 100
     private var isRefreshing: Bool = false
     
+    private var loadingViewWorkItem: DispatchWorkItem?
     private var loadingContainerView: UIView!
     var headerContainerView: HParallaxHeader!
     private var contentContainerView: UIView!
@@ -69,6 +71,26 @@ class HParallaxHeaderContainer: UIView {
     private var gestureStartLocation: CGPoint = .zero
     private var headerStartHeight: CGFloat = 0
     private var isReceiveTouchFromOtherScrollView: Bool = false
+    
+    fileprivate var updatedHeaderHeight: CGFloat = -1 {
+        willSet {
+            if newValue != updatedHeaderHeight {
+                delegate?.hParallaxContainer?(self,
+                                              didChangeHeaderViewHeight: newValue,
+                                              maximumAvailableHeight: maximumHeightOfHeader)
+            }
+        }
+    }
+    
+    fileprivate var updatedPullToRefreshHeight: CGFloat = -1 {
+        willSet {
+            if newValue != updatedPullToRefreshHeight {
+                delegate?.hParallaxContainer?(self,
+                                              didChangePullToRefreshViewHeight: newValue,
+                                              maximumAvailableHeight: maximunHeightOfPullToRefresh)
+            }
+        }
+    }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -201,36 +223,43 @@ class HParallaxHeaderContainer: UIView {
                 height = height < minimumHeightOfHeader ? minimumHeightOfHeader : height
                 height = height > maximumHeightOfHeader ? maximumHeightOfHeader : height
                 heightOfHeader.constant = height
+                updatedHeaderHeight = height
                 if isEnablePullToRefresh {
                     let rawHeight = headerStartHeight - offSetY - height
                     var loadingHeight = rawHeight
                     loadingHeight = loadingHeight < 0 ? 0 : loadingHeight
                     loadingHeight = loadingHeight > maximunHeightOfPullToRefresh ? maximunHeightOfPullToRefresh : loadingHeight
                     heightOfLoading.constant = loadingHeight
-                    if heightOfHeader.constant == maximumHeightOfHeader {
-                        delegate?.hParallaxContainer?(self,
-                                                      didChangePullToRefreshViewHeight: heightOfLoading.constant,
-                                                      maximumAvailableHeight: maximunHeightOfPullToRefresh)
-                    }
+                    updatedPullToRefreshHeight = loadingHeight
                 }
             }
         case .ended:
             headerStartHeight = 0
             isReceiveTouchFromOtherScrollView = false
-            if isEnablePullToRefresh && heightOfLoading.constant > 0 {
-                if heightOfLoading.constant == maximunHeightOfPullToRefresh {
-                    delegate?.hParallaxContainerDidPullToRefresh?(self)
-                }
-                UIView.animate(withDuration: 0.2) {
-                    self.heightOfLoading.constant = 0
-                    self.layoutIfNeeded()
-                    self.delegate?.hParallaxContainer?(self,
-                                                       didChangePullToRefreshViewHeight: self.heightOfLoading.constant,
-                                                       maximumAvailableHeight: self.maximunHeightOfPullToRefresh)
-
-                }
-            }
+            performRefreshIfNeeded()
         default: ()
+        }
+    }
+    
+    func performRefreshIfNeeded() {
+        if isEnablePullToRefresh && heightOfLoading.constant > 0 {
+            if heightOfLoading.constant == maximunHeightOfPullToRefresh {
+                delegate?.hParallaxContainerDidPullToRefresh?(self)
+            }
+            UIView.animate(withDuration: 0.2) {
+                self.heightOfLoading.constant = 0
+                self.layoutIfNeeded()
+                self.delegate?.hParallaxContainer?(self,
+                                                   didChangePullToRefreshViewHeight: self.heightOfLoading.constant,
+                                                   maximumAvailableHeight: self.maximunHeightOfPullToRefresh)
+            }
+            loadingViewWorkItem?.cancel()
+            let workItem = DispatchWorkItem {
+                self.performRefreshIfNeeded()
+            }
+            loadingViewWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2,
+                                          execute: workItem)
         }
     }
     
@@ -257,19 +286,31 @@ class HParallaxHeaderContainer: UIView {
             height = height > maximunHeightOfPullToRefresh ? maximunHeightOfPullToRefresh : height
             heightOfLoading.constant = height
             isMove = 0 < height && height < maximunHeightOfPullToRefresh
-            delegate?.hParallaxContainer?(self,
-                                          didChangePullToRefreshViewHeight: heightOfLoading.constant,
-                                          maximumAvailableHeight: maximunHeightOfPullToRefresh)
+            if height != updatedPullToRefreshHeight {
+                updatedPullToRefreshHeight = height
+                delegate?.hParallaxContainer?(self,
+                                              didChangePullToRefreshViewHeight: height,
+                                              maximumAvailableHeight: maximunHeightOfPullToRefresh)
+            }
+          
         } else if (lock && diff < 0) || (!lock && diff > 0) {
             var height: CGFloat = heightOfHeader.constant + diff
             height = height < minimumHeightOfHeader ? minimumHeightOfHeader : height
             height = height > maximumHeightOfHeader ? maximumHeightOfHeader : height
             heightOfHeader.constant = height
             isMove = minimumHeightOfHeader < height && height < maximumHeightOfHeader
+            updatedHeaderHeight = height
         }
         
         if isMove {
-            self.scrollView(scrollView, setContentOffset: old)
+            // Scroll Up
+            if (lock && diff < 0) {
+                self.scrollView(scrollView, setContentOffset: old)
+            } else if (!lock && diff > 0) {
+                self.scrollView(scrollView,
+                                setContentOffset: .init(x: scrollView.contentOffset.x,
+                                                        y: -scrollView.contentInset.top))
+            }
         }
     }
     

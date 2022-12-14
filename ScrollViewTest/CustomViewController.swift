@@ -14,10 +14,9 @@ class CustomViewController: UIViewController {
     @IBOutlet weak var headerContainer: HParallaxHeaderContainer!
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
-        headerContainer.headerContainerView.height = 100
-        header.backgroundColor = .blue
+        headerContainer.headerContainerView.headerHeight = 100
+        headerContainer.isEnablePullToRefresh = true
     }
 
 
@@ -54,7 +53,12 @@ class CustomViewController: UIViewController {
 
 extension CustomViewController: HParallaxHeaderContainerDelegate {
     func hParallaxContainer(_ view: HParallaxHeaderContainer, didChangePullToRefreshViewHeight height: CGFloat, maximumAvailableHeight: CGFloat) {
+        print("Header \(height)")
         loadingIcon.transform = CGAffineTransform(rotationAngle:  (height / maximumAvailableHeight) * CGFloat.pi)
+    }
+    
+    func hParallaxContainer(_ view: HParallaxHeaderContainer, didChangeHeaderViewHeight height: CGFloat, maximumAvailableHeight: CGFloat) {
+        print("Header \(height)")
     }
     
     func hParallaxContainerDidPullToRefresh(_ view: HParallaxHeaderContainer) {

@@ -8,7 +8,6 @@
 import UIKit
 
 class HParallaxHeader: UIView {
-    
     enum HeaderMode {
         /**
          The option to scale the content to fill the size of the header. Some portion of the content may be clipped to fill the header’s bounds.
@@ -40,15 +39,15 @@ class HParallaxHeader: UIView {
         }
     }
     
-    @IBInspectable public var height: CGFloat = 0 {
+    @IBInspectable public var headerHeight: CGFloat = 0 {
         didSet {
-            if (height != oldValue) {
-                heightConstraint?.constant = height
+            if (headerHeight != oldValue) {
+                viewHeightConstraint?.constant = headerHeight
             }
         }
     }
     
-    private var heightConstraint: NSLayoutConstraint?
+    private var viewHeightConstraint: NSLayoutConstraint?
     @IBOutlet var content: UIView! {
         didSet {
             updateConstraints()
@@ -72,12 +71,11 @@ class HParallaxHeader: UIView {
     }
     
     override func updateConstraints() {
-        super.updateConstraints()
         content.removeFromSuperview()
         addSubview(content)
-        if let heightConstraint = heightConstraint {
-            content.removeConstraint(heightConstraint)
-            self.heightConstraint = nil
+        if let viewHeightConstraint = viewHeightConstraint {
+            content.removeConstraint(viewHeightConstraint)
+            self.viewHeightConstraint = nil
         }
      
         content.translatesAutoresizingMaskIntoConstraints = false
@@ -94,14 +92,15 @@ class HParallaxHeader: UIView {
         case .center:
             setCenterModeConstraints()
         }
+        super.updateConstraints()
     }
 
     func setCenterModeConstraints() {
         content?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         content?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        heightConstraint =  content?.heightAnchor.constraint(equalToConstant: height)
-        heightConstraint?.isActive = true
+        viewHeightConstraint =  content?.heightAnchor.constraint(equalToConstant: headerHeight)
+        viewHeightConstraint?.isActive = true
     }
     
     func setFillModeConstraints() {
@@ -109,7 +108,7 @@ class HParallaxHeader: UIView {
         content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         content?.topAnchor.constraint(equalTo: topAnchor).isActive = true
         content?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        heightConstraint?.isActive = false
+        viewHeightConstraint?.isActive = false
     }
     
     func setTopFillModeConstraints() {
@@ -117,11 +116,11 @@ class HParallaxHeader: UIView {
         content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         content?.topAnchor.constraint(equalTo: topAnchor).isActive = true
         
-        heightConstraint = content?.heightAnchor.constraint(greaterThanOrEqualToConstant: height)
-        heightConstraint?.isActive = true
+        viewHeightConstraint = content?.heightAnchor.constraint(greaterThanOrEqualToConstant: headerHeight)
+        viewHeightConstraint?.isActive = true
         
         let constraint = content?.bottomAnchor.constraint(equalTo: bottomAnchor)
-        constraint?.priority = .defaultLow
+        constraint?.priority = .defaultHigh
         constraint?.isActive = true
     }
 
@@ -129,15 +128,15 @@ class HParallaxHeader: UIView {
         content?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         content?.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        heightConstraint = content?.heightAnchor.constraint(equalToConstant: height)
-        heightConstraint?.isActive = true
+        viewHeightConstraint = content?.heightAnchor.constraint(equalToConstant: headerHeight)
+        viewHeightConstraint?.isActive = true
     }
     
     func setBottomModeConstraints() {
         content?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         content?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        heightConstraint = content?.heightAnchor.constraint(equalToConstant: height)
-        heightConstraint?.isActive = true
+        viewHeightConstraint = content?.heightAnchor.constraint(equalToConstant: headerHeight)
+        viewHeightConstraint?.isActive = true
     }
 }
