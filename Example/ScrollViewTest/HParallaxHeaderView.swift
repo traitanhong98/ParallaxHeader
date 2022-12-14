@@ -7,8 +7,8 @@
 
 import UIKit
 
-class HParallaxHeader: UIView {
-    enum HeaderMode {
+public class HParallaxHeaderView: UIView {
+    public enum HeaderMode {
         /**
          The option to scale the content to fill the size of the header. Some portion of the content may be clipped to fill the header’s bounds.
          */
@@ -48,7 +48,7 @@ class HParallaxHeader: UIView {
     }
     
     private var viewHeightConstraint: NSLayoutConstraint?
-    @IBOutlet var content: UIView! {
+    @IBOutlet public var contentContainerView: UIView! {
         didSet {
             updateConstraints()
         }
@@ -64,21 +64,21 @@ class HParallaxHeader: UIView {
         updateConstraints()
     }
     
-    init(contentView: UIView) {
+    public init(contentView: UIView) {
         super.init(frame: .zero)
-        self.content = contentView
+        self.contentContainerView = contentView
         updateConstraints()
     }
     
-    override func updateConstraints() {
-        content.removeFromSuperview()
-        addSubview(content)
+    public override func updateConstraints() {
+        contentContainerView.removeFromSuperview()
+        addSubview(contentContainerView)
         if let viewHeightConstraint = viewHeightConstraint {
-            content.removeConstraint(viewHeightConstraint)
+            contentContainerView.removeConstraint(viewHeightConstraint)
             self.viewHeightConstraint = nil
         }
      
-        content.translatesAutoresizingMaskIntoConstraints = false
+        contentContainerView.translatesAutoresizingMaskIntoConstraints = false
         
         switch self.mode {
         case .fill:
@@ -96,47 +96,47 @@ class HParallaxHeader: UIView {
     }
 
     func setCenterModeConstraints() {
-        content?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        content?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        viewHeightConstraint =  content?.heightAnchor.constraint(equalToConstant: headerHeight)
+        contentContainerView?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        contentContainerView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        contentContainerView?.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        viewHeightConstraint =  contentContainerView?.heightAnchor.constraint(equalToConstant: headerHeight)
         viewHeightConstraint?.isActive = true
     }
     
     func setFillModeConstraints() {
-        content?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        content?.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        content?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        contentContainerView?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        contentContainerView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        contentContainerView?.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        contentContainerView?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         viewHeightConstraint?.isActive = false
     }
     
     func setTopFillModeConstraints() {
-        content?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        content?.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        contentContainerView?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        contentContainerView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        contentContainerView?.topAnchor.constraint(equalTo: topAnchor).isActive = true
         
-        viewHeightConstraint = content?.heightAnchor.constraint(greaterThanOrEqualToConstant: headerHeight)
+        viewHeightConstraint = contentContainerView?.heightAnchor.constraint(greaterThanOrEqualToConstant: headerHeight)
         viewHeightConstraint?.isActive = true
         
-        let constraint = content?.bottomAnchor.constraint(equalTo: bottomAnchor)
+        let constraint = contentContainerView?.bottomAnchor.constraint(equalTo: bottomAnchor)
         constraint?.priority = .defaultHigh
         constraint?.isActive = true
     }
 
     func setTopModeConstraints() {
-        content?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        content?.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        viewHeightConstraint = content?.heightAnchor.constraint(equalToConstant: headerHeight)
+        contentContainerView?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        contentContainerView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        contentContainerView?.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        viewHeightConstraint = contentContainerView?.heightAnchor.constraint(equalToConstant: headerHeight)
         viewHeightConstraint?.isActive = true
     }
     
     func setBottomModeConstraints() {
-        content?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        content?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        content?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        viewHeightConstraint = content?.heightAnchor.constraint(equalToConstant: headerHeight)
+        contentContainerView?.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        contentContainerView?.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        contentContainerView?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        viewHeightConstraint = contentContainerView?.heightAnchor.constraint(equalToConstant: headerHeight)
         viewHeightConstraint?.isActive = true
     }
 }

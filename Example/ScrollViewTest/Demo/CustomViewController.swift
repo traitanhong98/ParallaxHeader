@@ -6,29 +6,26 @@
 //
 
 import UIKit
+import HParallaxHeader
 
 class CustomViewController: UIViewController {
 
+    @IBOutlet var headerMain: UIView!
+    @IBOutlet var contentMain: UIView!
+    @IBOutlet var loadingMain: UIView!
     @IBOutlet weak var loadingIcon: UIImageView!
     @IBOutlet var header: UIView!
     @IBOutlet weak var headerContainer: HParallaxHeaderContainer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        headerContainer.headerContainerView.headerHeight = 100
-        headerContainer.isEnablePullToRefresh = true
+//        headerContainer.headerContainerView.headerHeight = 100
+//        headerContainer.isEnablePullToRefresh = true
+        headerContainer.contentHeaderView = headerMain
+        headerContainer.mainContentView = contentMain
+        headerContainer.loadingView = loadingMain
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     @IBAction func fillAction(_ sender: Any) {
         headerContainer.headerContainerView.mode = .fill

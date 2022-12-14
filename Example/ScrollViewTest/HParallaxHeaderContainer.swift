@@ -7,16 +7,16 @@
 
 import UIKit
 
-@objc protocol HParallaxHeaderContainerDelegate: AnyObject {
+@objc public protocol HParallaxHeaderContainerDelegate: AnyObject {
     @objc optional func hParallaxContainerDidPullToRefresh(_ view: HParallaxHeaderContainer)
     @objc optional func hParallaxContainer(_ view: HParallaxHeaderContainer, didChangePullToRefreshViewHeight height: CGFloat, maximumAvailableHeight: CGFloat)
     @objc optional func hParallaxContainer(_ view: HParallaxHeaderContainer, didChangeHeaderViewHeight height: CGFloat, maximumAvailableHeight: CGFloat)
 }
 
-class HParallaxHeaderContainer: UIView {
+public class HParallaxHeaderContainer: UIView {
     static var context = "HParallaxHeaderContainerContext"
     // MARK: - Designable
-    @IBInspectable var maximumHeightOfHeader: CGFloat = 250 {
+    @IBInspectable public var maximumHeightOfHeader: CGFloat = 250 {
         didSet {
             if heightOfHeader.constant > maximumHeightOfHeader {
                 heightOfHeader.constant = maximumHeightOfHeader
@@ -24,7 +24,7 @@ class HParallaxHeaderContainer: UIView {
         }
     }
     
-    @IBInspectable var minimumHeightOfHeader: CGFloat = 50 {
+    @IBInspectable public var minimumHeightOfHeader: CGFloat = 50 {
         didSet {
             if heightOfHeader.constant < minimumHeightOfHeader {
                 heightOfHeader.constant = minimumHeightOfHeader
@@ -32,25 +32,25 @@ class HParallaxHeaderContainer: UIView {
         }
     }
     // MARK: - Properties
-    @IBOutlet weak var header: UIView! {
+    @IBOutlet public weak var contentHeaderView: UIView! {
         didSet {
             setupHeaderView()
         }
     }
     
-    @IBOutlet weak var content: UIView! {
+    @IBOutlet public weak var mainContentView: UIView! {
         didSet {
             setupContent()
         }
     }
     
-    @IBOutlet weak var loading: UIView?{
+    @IBOutlet public weak var loadingView: UIView?{
         didSet {
             setupLoadingView()
         }
     }
     
-    @IBOutlet weak var delegate: HParallaxHeaderContainerDelegate?
+    public weak var delegate: HParallaxHeaderContainerDelegate?
     
     
     @IBInspectable public var isEnablePullToRefresh: Bool = false
@@ -59,11 +59,11 @@ class HParallaxHeaderContainer: UIView {
     
     private var loadingViewWorkItem: DispatchWorkItem?
     private var loadingContainerView: UIView!
-    var headerContainerView: HParallaxHeader!
+    public var headerContainerView: HParallaxHeaderView!
     private var contentContainerView: UIView!
     
-    var heightOfLoading: NSLayoutConstraint!
-    var heightOfHeader: NSLayoutConstraint!
+    private var heightOfLoading: NSLayoutConstraint!
+    private var heightOfHeader: NSLayoutConstraint!
     
     private var observingViews: [UIView] = []
     private var isObserving: Bool = true
@@ -92,21 +92,21 @@ class HParallaxHeaderContainer: UIView {
         }
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
         
     }
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
     
-    init(header: UIView, content: UIView) {
+    public init(header: UIView, content: UIView) {
         super.init(frame: .zero)
-        self.header = header
-        self.content = content
+        self.contentHeaderView = header
+        self.mainContentView = content
         setupView()
         makeUI()
     }
@@ -117,7 +117,7 @@ class HParallaxHeaderContainer: UIView {
         }
     }
     
-    override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
         makeUI()
     }
@@ -147,8 +147,8 @@ class HParallaxHeaderContainer: UIView {
         heightOfLoading.isActive = true
         setupLoadingView()
         // Header
-        header.translatesAutoresizingMaskIntoConstraints = false
-        headerContainerView = HParallaxHeader(contentView: header)
+        contentHeaderView.translatesAutoresizingMaskIntoConstraints = false
+        headerContainerView = HParallaxHeaderView(contentView: contentHeaderView)
         headerContainerView.clipsToBounds = true
         headerContainerView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(headerContainerView)
@@ -177,7 +177,7 @@ class HParallaxHeaderContainer: UIView {
     func setupLoadingView() {
         guard let loadingContainerView = loadingContainerView else { return }
         loadingContainerView.subviews.forEach({$0.removeFromSuperview()})
-        if let loadingView = loading {
+        if let loadingView = loadingView {
             loadingView.translatesAutoresizingMaskIntoConstraints = false
             loadingContainerView.addSubview(loadingView)
             NSLayoutConstraint.activate([
@@ -191,19 +191,19 @@ class HParallaxHeaderContainer: UIView {
     
     func setupHeaderView() {
         guard let headerContainerView = headerContainerView else { return }
-        headerContainerView.content = header
+        headerContainerView.contentContainerView = contentHeaderView
     }
     
     func setupContent() {
         guard let contentContainerView = contentContainerView else { return }
         contentContainerView.subviews.forEach({$0.removeFromSuperview()})
-        content.translatesAutoresizingMaskIntoConstraints = false
-        contentContainerView.addSubview(content)
+        mainContentView.translatesAutoresizingMaskIntoConstraints = false
+        contentContainerView.addSubview(mainContentView)
         NSLayoutConstraint.activate([
-            content.topAnchor.constraint(equalTo: contentContainerView.topAnchor),
-            content.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
-            content.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
-            content.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor)
+            mainContentView.topAnchor.constraint(equalTo: contentContainerView.topAnchor),
+            mainContentView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
+            mainContentView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+            mainContentView.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor)
         ])
     }
     
@@ -263,7 +263,7 @@ class HParallaxHeaderContainer: UIView {
         }
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard context == &HParallaxHeaderContainer.context,
               keyPath == #keyPath(UIScrollView.contentOffset) else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
@@ -320,9 +320,9 @@ class HParallaxHeaderContainer: UIView {
         isObserving = true
     }
 }
-
+// MARK: - UIGestureRecognizerDelegate
 extension HParallaxHeaderContainer: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         guard let gestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer else {
             return false
         }
