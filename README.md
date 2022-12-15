@@ -1,6 +1,8 @@
 # HParallaxHeader
 
-HParallaxHeader is a simple version from https://github.com/maxep/MXParallaxHeader and https://github.com/ngochiencse/HPParallaxHeader.
+HParallaxHeader is a simple version from:
+- https://github.com/maxep/MXParallaxHeader 
+- https://github.com/ngochiencse/HPParallaxHeader.
 
 HPParallaxHeader is a simple view which contains header and can recognize sub scroll views automatically.
 
@@ -36,7 +38,7 @@ You can use  [Swift Package Manager](https://swift.org/package-manager/)  direct
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/traitanhong98/ParallaxHeader")
+    .package(url: "https://github.com/traitanhong98/ParallaxHeader", branch: "main")
 ]
 ```
 
@@ -47,5 +49,5 @@ dependencies: [
 
 ## License
 
-HParallaxHeader is available under the MIT license. See the LICENSE file for more info.
+HParallaxHeader is available under the MIT license. 
 
